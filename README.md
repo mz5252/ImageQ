@@ -31,8 +31,9 @@ Make sure the following files are available locally on your computer:
 3. Ensure all files are placed in the same folder within MATLAB Drive for easy reference
 
 ### Step 4: Launch the GUI
-1. In the MATLAB Online interface, open main.m file and go to the Editor tab
-2. Click “Run” button 
+1. In the MATLAB Online interface
+2. Open main.m file, go to the Editor tab
+3. Click “Run” button 
 
 #### Notes:
 - GUI elements such as sliders, drawpolygon, and uicontrol are supported in MATLAB Online.
