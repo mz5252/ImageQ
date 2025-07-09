@@ -1,7 +1,3 @@
-
-crop_adjust_gui_drag('C:\Users\cvm-gritton-lab\Downloads', 'Rachael_animal1')
-
-
 function crop_adjust_gui_drag(openDir, animal_name)
     adjustedCopy = [];  % this will store the latest unfiltered adjusted image
     filteredCopy = []; 
@@ -11,7 +7,8 @@ function crop_adjust_gui_drag(openDir, animal_name)
     modeButtons = struct();  % 🛠 now officially exists
     currentShape = 'rectangle'; % Add shape state variable
     roi = []; % ROI object
-
+    rulerLine = [];
+    rulerPoints = [];
 
     % Optional directory to start in
     if nargin < 1 || ~isfolder(openDir)
@@ -86,6 +83,25 @@ function setShape(shape)
     createROI();
     updateImage();
 end
+
+uicontrol(fig, 'Style', 'text', 'String', 'Distance (px):', ...
+    'Units', 'normalized', 'Position', [0.46, 0.76, 0.05, 0.025], ...
+    'FontSize', 10);
+
+rulerDistanceBox = uicontrol(fig, 'Style', 'edit', ...
+    'String', '', 'Enable', 'inactive', ...
+    'Units', 'normalized', 'Position', [0.46, 0.72, 0.06, 0.025], ...
+    'FontSize', 10, 'BackgroundColor', [1 1 1]);
+
+uicontrol(fig, 'Style', 'pushbutton', 'String', 'Ruler', ...
+    'Units', 'normalized', 'Position', [0.46, 0.84, 0.041, 0.025], ...
+    'BackgroundColor', [0.9 0.9 1], ...
+    'Callback', @(~,~) startRulerMode());
+
+uicontrol(fig, 'Style', 'pushbutton', 'String', 'Clear Ruler', ...
+    'Units', 'normalized', 'Position', [0.46, 0.80, 0.041, 0.025], ...
+    'BackgroundColor', [1 0.9 0.9], ...
+    'Callback', @(~,~) clearRuler());
 
     %% Axes
     % Leave axOriginal alone, so ROI dragging works
@@ -642,8 +658,6 @@ function toggleChannel(channelIdx)
     end
     hB.CData = bData;
 end
-
-
 
 function undoClick(~,~)
     switch currentMode
@@ -1679,6 +1693,42 @@ function clearAllLabels()
             rgbHandles = []; rgbPositions = zeros(0,2); rgbCounter = 0;
     end
     updateCountDisplay();
+end
+
+function startRulerMode()
+    rulerPoints = [];  % 清空上一次
+    title(axCropped, 'Click two points to measure distance', 'Color', 'b');
+    set(hCroppedRGB, 'ButtonDownFcn', @rulerClick);
+end
+
+function rulerClick(~,~)
+    pt = get(axCropped, 'CurrentPoint');
+    pt = pt(1, 1:2);  % [x, y]
+    rulerPoints(end+1, :) = pt;
+
+    if size(rulerPoints, 1) == 2
+        % 画线
+        if isgraphics(rulerLine), delete(rulerLine); end
+        rulerLine = line(axCropped, rulerPoints(:,1), rulerPoints(:,2), ...
+            'Color', 'yellow', 'LineWidth', 2);
+
+        % 计算距离
+        d = sqrt(sum(diff(rulerPoints).^2));
+
+        % 显示在 GUI 框中
+        rulerDistanceBox.String = sprintf('%.2f', d);
+
+        % 恢复点击逻辑
+        set(hCroppedRGB, 'ButtonDownFcn', @labelClick);
+        title(axCropped, 'Adjusted RGB Crop');
+    end
+end
+
+function clearRuler()
+    if isgraphics(rulerLine), delete(rulerLine); end
+    rulerLine = [];
+    rulerPoints = [];
+    rulerDistanceBox.String = '';
 end
 
     createROI();
