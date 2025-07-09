@@ -1,4 +1,7 @@
 function main(openDir, animal_name)
+    % Add src folder to MATLAB path
+    addpath(fullfile(fileparts(mfilename('fullpath')), 'src'));
+    
     adjustedCopy = [];  % this will store the latest unfiltered adjusted image
     filteredCopy = []; 
     channelActive = [true true true];  % [R, G, B] initially all ON
