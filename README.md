@@ -47,12 +47,15 @@ To retrieve your outputs:
 
 ## Frequently Asked Questions (FAQ)
 •	Q1: GUI won't start / image doesn't load?
+
 A1: Check that the correct MATLAB version and Image Processing Toolbox are installed.
 
 •	Q2: Labels do not show up after clicking Auto Label?
+
 A2: Ensure that the threshold settings are reasonable and the contrast is adequate.
 
 •	Q3: Can I reuse a set of parameters for another image?
+
 A3: Yes, use "Import parameters" to load a saved .xlsx file.
 
 
