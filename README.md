@@ -17,7 +17,7 @@ This tool is a MATLAB GUI application designed for interactive cropping, channel
 ## Instructions for Running ImageQ GUI on MATLAB Online
 ### Step 1: Prepare Your Files
 Make sure the following files are available locally on your computer:
-- .m files in the main folder – the main GUI script
+- main.m and src folder – the main GUI script
 - Sample image files (.tif, .png, .jpg)
 - Optional: .xlsx parameter files for loading preset configurations
 
